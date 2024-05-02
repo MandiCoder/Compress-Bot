@@ -1,0 +1,6 @@
+downloads
+.env
+poetry.lock
+*.session*
+test*
+__pycache__

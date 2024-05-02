@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "compressbot"
+version = "0.1.0"
+description = ""
+package-mode = false
+authors = ["mandicoder <mandicoder@proton.me>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pyrogram = "^2.0.106"
+tgcrypto = "^1.2.5"
+python-dotenv = "^1.0.1"
+aiohttp = "^3.9.5"
+jinja2 = "^3.1.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
