@@ -13,9 +13,17 @@ from pyrogram.types import (Message,
 
 
 @bot.app.on_message(filters.command("start"))
-def command_start(app, msg):
+def command_start(app: Client, msg: Message):
     msg.reply("Hola")
     datos_usuarios[msg.from_user.username] = []
+    
+    
+    
+@bot.app.on_message(filters.regex("rm_"))
+def borrar_elemento(app: Client, msg: Message):
+    index = msg.text.split("_")[-1]
+    datos_usuarios[msg.from_user.username].pop(int(index))
+    show_data(msg)    
     
     
     
@@ -72,12 +80,19 @@ def comprimir_archivos(app:Client, msg:Message):
         borrar(f"{folder}.zip")
         sms.delete()
 
+
+
 @bot.app.on_callback_query()
 def enviar_mensaje(app:Client, callback:CallbackQuery):
     msg:Message = callback.message
     msg.delete()
-    msg.reply_text("**🏷 Introduzca el nombre para el archivo:**", 
-                   reply_markup=ForceReply(placeholder="Nombre:"))
+    
+    if callback.data == "compress":
+        msg.reply_text("**🏷 Introduzca el nombre para el archivo:**", 
+                    reply_markup=ForceReply(placeholder="Nombre:"))
+        
+    elif callback.data == "cancel":
+        datos_usuarios[callback.from_user.username].clear()
     
 
 
