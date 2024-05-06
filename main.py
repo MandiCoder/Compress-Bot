@@ -26,9 +26,10 @@ def command_start(app: Client, msg: Message):
     
 @bot.app.on_message(filters.regex("rm_"))
 def borrar_elemento(app: Client, msg: Message):
+    username = msg.from_user.username
     index = msg.text.split("_")[-1]
-    datos_usuarios[msg.from_user.username].pop(int(index))
-    show_data(msg)    
+    datos_usuarios[username].pop(int(index))
+    show_data(msg, username)    
     
     
     
@@ -47,10 +48,10 @@ def get_media(app: Client, msg: Message):
     
 
 
-@bot.app.on_message(filters.regex("📋 VER ARCHIVOS"))
+@bot.app.on_message(filters.regex("📋 VER ARCHIVOS") | filters.command("ver_archivos"))
 def list_media(app:Client, msg:Message):
     msg.delete()
-    show_data(msg)
+    show_data(msg, msg.from_user.username)
 
 
 
@@ -118,14 +119,14 @@ def enviar_mensaje(app:Client, callback:CallbackQuery):
 
     
     elif callback.data == "progress":
-        callback.answer(f"Progreso: {progreso_usuarios[username]}", show_alert=True)
+        callback.answer(progreso_usuarios[username], show_alert=True)
 
 
     elif callback.data == "cancel_progreso":
         msg.delete()
         detener_progreso[username] = True
-        show_data(msg)
-
+        show_data(msg, username)  
+        
 
 if __name__ == '__main__':
     bot.iniciar_bot()

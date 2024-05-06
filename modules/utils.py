@@ -1,5 +1,5 @@
 from .global_variables import datos_usuarios
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message, User
 
 
 def sizeof(num: int, suffix="B"):
@@ -13,8 +13,7 @@ def sizeof(num: int, suffix="B"):
 
 
 
-def show_data(msg:Message):
-    username = msg.from_user.username
+def show_data(msg:Message, username:User):
     if username not in datos_usuarios:
         datos_usuarios[username] = []
     

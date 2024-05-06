@@ -7,7 +7,7 @@ def update_progress_bar(inte, max):
     percentage *= 100
     percentage = round(percentage)
     hashes = int(percentage / 5)
-    spaces = 10 - hashes
+    spaces = 15 - hashes
     progress_bar = "[" + "■" * hashes + "□" * spaces + "]"
     percentage_pos = int(hashes / 1)
     percentage_string = "[" + str(percentage) + "%" + "]"
