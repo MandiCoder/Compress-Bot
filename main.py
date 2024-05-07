@@ -1,8 +1,9 @@
 from modules.global_variables import bot, datos_usuarios, progreso_usuarios, detener_progreso
 from modules.progress import progress
 from modules.utils import show_data
-from os.path import basename, join
-from os import unlink as borrar
+from modules.split_files import getBytes, split
+from os.path import basename, join, getsize
+from os import unlink as borrar, listdir, makedirs, removedirs
 from shutil import rmtree
 from zipfile import ZipFile, ZIP_DEFLATED
 from time import time
@@ -71,6 +72,8 @@ def comprimir_archivos(app:Client, msg:Message):
 
         my_zip = ZipFile(f"{msg.text}.zip", 'w', ZIP_DEFLATED)
         folder = msg.text
+        file_zip = f"{folder}.zip"
+        size_file = 100
         
         for file in lista_descargas:
             start = time()
@@ -95,12 +98,21 @@ def comprimir_archivos(app:Client, msg:Message):
             datos_usuarios[username].clear()
             sms.edit_text("✅ Finalizado")
             sms.edit_text("**🚚 Enviando a Telegram**")
-            app.send_document(msg.chat.id, f"{folder}.zip")
-            borrar(f"{folder}.zip")
+            if (round(getsize(file_zip) / 1000000, 2) > size_file):
+                path_zip = join('folder_zip', username)
+                makedirs(path_zip)
+                split(file_zip, path_zip, getBytes(f"{size_file}.0MiB"))
+                for i in listdir(path_zip):
+                    app.send_document(msg.chat.id, join(path_zip, i))
+                    borrar(join(path_zip, i))
+                removedirs(path_zip)
+            else:
+                app.send_document(msg.chat.id, file_zip)
+            borrar(file_zip)
             sms.delete()
         else:
             my_zip.close()
-            borrar(f"{folder}.zip")
+            borrar(file_zip)
 
 
 @bot.app.on_callback_query()
