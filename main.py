@@ -63,11 +63,12 @@ def comprimir_archivos(app:Client, msg:Message):
         username:str = msg.from_user.username
         lista_descargas:list = datos_usuarios[username]
         total_archivos:int = len(lista_descargas)
+        markup = InlineKeyboardMarkup([
+            [InlineKeyboardButton("📈 VER PROGRESO", callback_data="progress")],
+            [InlineKeyboardButton("❌ CANCELAR", callback_data="cancel_progreso")]])
 
         sms:Message = msg.reply_text(f"**🚛 Descargando archivos...\nRestantes: {total_archivos}**",
-        reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("📈 VER PROGRESO", callback_data="progress")],
-            [InlineKeyboardButton("❌ CANCELAR", callback_data="cancel_progreso")]]))
+        reply_markup=markup)
 
         my_zip = ZipFile(f"{msg.text}.zip", 'w', ZIP_DEFLATED)
         folder = msg.text
@@ -86,7 +87,7 @@ def comprimir_archivos(app:Client, msg:Message):
                 my_zip.write(path)
                 borrar(path)
                 total_archivos -= 1
-                sms.edit_text(f"**🚛 Descargando archivos...\nRestantes: {total_archivos}**")
+                sms.edit_text(f"**🚛 Descargando archivos...\nRestantes: {total_archivos}**", reply_markup=markup)
             else:
                 rmtree(folder)
             
