@@ -74,7 +74,7 @@ def comprimir_archivos(app:Client, msg:Message):
         my_zip = ZipFile(f"{msg.text}.zip", 'w', ZIP_DEFLATED)
         folder = msg.text
         file_zip = f"{folder}.zip"
-        size_file = 100
+        size_file = 2000
         
         for file in lista_descargas:
             start = time()
